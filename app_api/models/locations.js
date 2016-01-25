@@ -14,6 +14,7 @@ var reviewSchema = new mongoose.Schema({
     createdOn: {type: Date, "default": Date.now}
 });
 
+/*Main schema, the above schema are sub-schema*/
 var locationSchema = new mongoose.Schema({
     name: {type: String, required: true},
     address: String,
