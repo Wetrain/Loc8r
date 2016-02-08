@@ -52,7 +52,7 @@ module.exports.locationsListByDistance = function(req, res) {
         maxDistance: theEarth.getRadsFromDistance(maxDistance),
         num: 10
     };
-    if(!lng || !lat) {
+    if(!lng && lng !== 0 || !lat && lat !== 0) {
         sendJsonResponse(res, 404, {"message": "lng and lat needed"});
         return;
     }
@@ -67,6 +67,9 @@ module.exports.locationsListByDistance = function(req, res) {
     });
 };
 
+
+/* POST a new location */
+/* /api/locations */
 module.exports.locationsCreate = function(req, res) {
     Loc.create({
        name: req.body.name,
@@ -86,9 +89,10 @@ module.exports.locationsCreate = function(req, res) {
        }]
     }, function(err, location) {
         if(err) {
+            console.log(err);
             sendJsonResponse(res, 400, err);
         } else {
-            sendJsonResponse(res, 200, location)
+            sendJsonResponse(res, 200, location);
         }
     });
 };
