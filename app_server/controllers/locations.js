@@ -2,12 +2,12 @@ var request = require('request');
 var apiOptions = {
     server: "http://localhost:3000"
     };
-    if(process.env.NODE_ENV === "production") {
-        apiOptions.server = "http://quiet-sierra-5352.herokuapp.com/";
-    }
+if(process.env.NODE_ENV === "production") {
+    apiOptions.server = "http://quiet-sierra-5352.herokuapp.com/";
+}
     
 /* Helper functions to avoid nesting */
-//format radians into distance 
+//format km into miles 
 var _formatDistance = function(distance) {
     var numDistance, unit;
     if(distance > 1) {
