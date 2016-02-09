@@ -1,10 +1,13 @@
 var request = require('request');
+
 var apiOptions = {
     server: "http://localhost:3000"
-    };
+};
+
 if(process.env.NODE_ENV === "production") {
     apiOptions.server = "http://quiet-sierra-5352.herokuapp.com/";
 }
+
     
 /* Helper functions to avoid nesting */
 //format km into miles 
@@ -93,7 +96,7 @@ var _showError = function (req, res, status) {
 
 
 
-//angular code
+/*angular code start*/
 module.exports.homelist = function(req, res) {
   renderHomepage(req, res);  
 };
@@ -108,7 +111,7 @@ var renderHomepage = function(req, res) {
         sidebar: 'Looking for a coffee shop with wifi brav? step right in for some lovelt coffee with our Loc8r app',
       }); 
 };
-
+/*angular code end*/
 var getLocationInfo = function(req, res, callback) {
     var requestOptions, path;
     path = '/api/locations/' + req.params.locationid;
