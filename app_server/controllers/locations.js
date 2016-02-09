@@ -5,7 +5,7 @@ var apiOptions = {
 };
 
 if(process.env.NODE_ENV === "production") {
-    apiOptions.server = "http://quiet-sierra-5352.herokuapp.com/";
+    apiOptions.server = "http://quiet-sierra-5352.herokuapp.com";
 }
 
     
