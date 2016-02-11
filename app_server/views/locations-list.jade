@@ -10,8 +10,9 @@ block content
          small &nbsp;#{pageHeader.strapline}
   .row
     .col-xs-12.col-sm-8(ng-controller='locationsListCtrl')
-      label(for="filter") Filter results
+      label(for="filter") Filter results 
       input#filter(type="text", name="filter", ng-model="textFilter")
+      button(class="button button-success", ng-click="refreshData()") Refresh cafes
       .error {{ message }}
       .row.list-group
           .col-xs-12.list-group-item(ng-repeat='location in data.locations | filter : textFilter')

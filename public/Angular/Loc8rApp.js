@@ -36,22 +36,63 @@ var ratingStars = function() {
 
 /* services */
 var loc8rData = function($http) {
-    return $http.get('/api/locations?lng=0.79&lat=51.3&maxDistance=2000000000000000000000');
+    var locationByCoords = function(lat, lng) {
+        return $http.get('/api/locations?lng='+lng+'&lat='+lat+'&maxDistance=2000000000000000000');
+    };
+    return { locationByCoords : locationByCoords };
+};
+
+var geoLocation = function() {
+    var getPosition = function(cbSuccess, cbError, cbNoGeo) {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(cbSuccess, cbError);
+        } else {
+            cbNoGeo();
+        }
+    };
+    return {
+        getPosition : getPosition
+    };
 };
 
 /* controllers */
-var locationsListCtrl = function($scope, loc8rData) {
+var locationsListCtrl = function($scope, loc8rData, geoLocation) {
   //$http returns a promise so we need to call either success or fail
-  $scope.meesage = "Searching for locations near by...";
-  loc8rData
+  $scope.meesage = "Getting your current location..";
+  
+  $scope.getData = function(position) {
+    console.log('called');
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    $scope.message = "Checking for Cafes nearby..";  
+    loc8rData.locationByCoords(lat, lng)
     .success(function(data) {
         $scope.mesaage = data.length > 0 ? "" : "No locations found =/";
         $scope.data = { locations: data };
     })
-      .error(function(error) {
-          $scope.message = "Sorry an internal error occured =/";
-          console.log(error); 
-      });
+        .error(function(error) {
+            $scope.message = "Sorry an internal error occured =/";
+            console.log(error); 
+    });
+  };
+    
+   $scope.showError = function(error) {
+       $scope.apply(function() {
+          $scope.message = error.message; 
+       });
+   };
+   
+   $scope.noGeo = function() {
+       $scope.apply(function() {
+          $scope.message = "Sorry your browser does not location awareness"; 
+       });
+   };
+   
+   $scope.refreshData = function() {
+        geoLocation.getPosition($scope.getData, $scope.showError, $scope.noGeo);
+   };
+   
+   $scope.refreshData();
 };
 
 
@@ -60,4 +101,5 @@ angular
     .controller('locationsListCtrl', locationsListCtrl)
     .filter('formatDistance', formatDistance)
     .directive('ratingStars', ratingStars)
-    .service('loc8rData', loc8rData);
+    .service('loc8rData', loc8rData)
+    .service('geoLocation', geoLocation);
